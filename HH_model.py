@@ -15,7 +15,6 @@ class Hodgkin_Huxley:
         self.gNa, self.gK, self.gl = 120, 36, 0.3
         self.m, self.n, self.h = (g.Gates() for i in range(3))
         self.C = 1
-        self.eps = np.finfo(float).eps
 
     def UpdateGateTimeConstants(self, V):
         self.m.alpha = .1 * ((25 - V) / (np.exp((25 - V) / 10) - 1))
@@ -36,7 +35,6 @@ class Hodgkin_Huxley:
         self.NStates[i] = self.n.updateGateState(self.deltaT)
         self.HStates[i] = self.h.updateGateState(self.deltaT)
 
-
 hh = Hodgkin_Huxley(10)
 hh.V[0] = -55
 for i in range(1, len(hh.times)):
@@ -44,8 +42,11 @@ for i in range(1, len(hh.times)):
     hh.UpdateActionPotential(i)
     hh.updateGateVariables(i)
 
-plt.plot(hh.times, hh.V)
-plt.xlabel("Time in msec")
-plt.ylabel("Membrane Voltage in milli volts")
-plt.title("Membrane Voltage of a Neuron over Time with Input Current =" + str(hh.I))
+fig, axs = plt.subplots(2)
+fig.suptitle("Membrane Voltage of a Neuron over Time with Input Current =" + str(hh.I), y=1)
+axs[0].plot(hh.times, hh.V)
+axs[1].plot(hh.times, hh.MStates, 'tab:orange', label='m')
+axs[1].plot(hh.times, hh.NStates, 'tab:green', label='n')
+axs[1].plot(hh.times, hh.HStates, 'tab:red', label='h')
+plt.legend(loc=1)
 plt.show()
