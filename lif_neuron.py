@@ -5,6 +5,14 @@ import numpy as np
 class LIFNeuron:
     def __init__(self, resting_v=-65, threshold_v=30, membrane_resistance=1, membrane_capacitance=10,
                  v_spike=100):
+        """
+        Initializes an LIF Neuron with the parameters given.
+        :param resting_v: The resting membrane potential of the neuron.
+        :param threshold_v: The threshold membrane potential crossing which a spike occurs.
+        :param membrane_resistance: The membrane resistance of the neuron.
+        :param membrane_capacitance: The membrane capacitance of the neuron.
+        :param v_spike: The potential gain associated with a spike.
+        """
         self.resting_v = resting_v
         self.threshold_v = threshold_v
         self.membrane_resistance = membrane_resistance
@@ -14,6 +22,13 @@ class LIFNeuron:
         self.tau = self.membrane_capacitance * self.membrane_resistance
 
     def simulate_neuron(self, input_current, time_values, time_delta):
+        """
+        Simulates the potential activity of a neuron.
+        :param input_current: The input current to a neuron.
+        :param time_values: The time values for which we need to simulate the neuron. This is an array.
+        :param time_delta: The time delta which we need to use while computing the membrane potential.
+        :return: The list of potentials associated with time values and a count of no. of spikes.
+        """
         potentials_list = []
         spike_count = 0
         for _ in time_values:
@@ -31,8 +46,9 @@ class LIFNeuron:
         return potentials_list, spike_count
 
     @staticmethod
-    def plot_potentials(potentials_list, time_values):
+    def plot_potentials(potentials_list, time_values, input_current):
         plt.plot(time_values, potentials_list)
+        plt.title("Membrane_potential for input current value: {}".format(input_current))
         plt.xlabel("Time")
         plt.ylabel("Membrane Potential")
         plt.show()
@@ -40,26 +56,27 @@ class LIFNeuron:
     @staticmethod
     def plot_spikes_vs_current(spike_counts, currents):
         plt.plot(currents, spike_counts)
+        plt.title("Input currents vs spike frequency plot")
         plt.xlabel("Input Current")
         plt.ylabel("Spikes/Unit time")
         plt.show()
 
 
-def q1():
-    input_current = 40
+def q1(input_current):
+    input_current = input_current
     time_delta = 0.1
     time = 100
-    time_values = list(np.linspace(time_delta, 1, int(time / time_delta)))
+    time_values = list(np.linspace(time_delta, time, int(time / time_delta)))
     new_lif = LIFNeuron()
     potentials_list, spike_count = new_lif.simulate_neuron(input_current, time_values, time_delta)
-    new_lif.plot_potentials(potentials_list, time_values)
+    new_lif.plot_potentials(potentials_list, time_values, input_current)
 
 
 def q2():
     input_currents = list(range(1, 200, 1))
     time_delta = 0.1
     time = 100
-    time_values = list(np.linspace(time_delta, 1, int(time / time_delta)))
+    time_values = list(np.linspace(time_delta, time, int(time / time_delta)))
     spike_counts = []
     for ic in input_currents:
         new_lif = LIFNeuron()
@@ -69,4 +86,7 @@ def q2():
 
 
 if __name__ == '__main__':
+    q1(input_current=5)
+    q1(input_current=31)
+    q1(input_current=50)
     q2()
