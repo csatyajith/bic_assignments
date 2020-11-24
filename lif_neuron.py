@@ -14,12 +14,18 @@ class LIFNeuron:
         :param v_spike: The potential gain associated with a spike.
         """
         self.resting_v = resting_v
-        self.threshold_v = threshold_v
+        self.threshold_v = -56
         self.membrane_resistance = membrane_resistance
         self.membrane_capacitance = membrane_capacitance
         self.membrane_potential = resting_v
         self.v_spike = v_spike
         self.tau = self.membrane_capacitance * self.membrane_resistance
+        self.ref_period = 10
+        self.t_inactive = -1
+
+    def reset(self):
+        self.t_inactive = -1
+        self.membrane_potential = self.resting_v
 
     def simulate_neuron(self, input_current, time_values, time_delta):
         """
