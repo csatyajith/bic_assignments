@@ -3,7 +3,7 @@ import numpy as np
 
 
 class LIFNeuron:
-    def __init__(self, resting_v=-65, threshold_v=30, membrane_resistance=1, membrane_capacitance=10,
+    def __init__(self, resting_v=-65, threshold_v=30, membrane_resistance=1, membrane_capacitance=100,
                  v_spike=100):
         """
         Initializes an LIF Neuron with the parameters given.
@@ -14,7 +14,7 @@ class LIFNeuron:
         :param v_spike: The potential gain associated with a spike.
         """
         self.resting_v = resting_v
-        self.threshold_v = -56
+        self.threshold_v = threshold_v
         self.membrane_resistance = membrane_resistance
         self.membrane_capacitance = membrane_capacitance
         self.membrane_potential = resting_v
@@ -70,8 +70,8 @@ class LIFNeuron:
 
 def q1(input_current):
     input_current = input_current
-    time_delta = 0.1
-    time = 100
+    time_delta = 1
+    time = 1000
     time_values = list(np.linspace(time_delta, time, int(time / time_delta)))
     new_lif = LIFNeuron()
     potentials_list, spike_count = new_lif.simulate_neuron(input_current, time_values, time_delta)
@@ -80,8 +80,8 @@ def q1(input_current):
 
 def q2():
     input_currents = list(range(1, 200, 1))
-    time_delta = 0.1
-    time = 100
+    time_delta = 1
+    time = 1000
     time_values = list(np.linspace(time_delta, time, int(time / time_delta)))
     spike_counts = []
     for ic in input_currents:
@@ -92,7 +92,7 @@ def q2():
 
 
 if __name__ == '__main__':
-    q1(input_current=5)
     q1(input_current=31)
-    q1(input_current=50)
-    q2()
+    # q1(input_current=2)
+    # q1(input_current=5)
+    # q2()
