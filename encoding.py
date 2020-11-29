@@ -49,7 +49,7 @@ class SNN:
 
     @staticmethod
     def rate_encoding(inp, time=1000):
-        rate_encoded_input = []
+        rate_encoded_input = []  # Spike train
         for y in range(len(inp)):
             temp = np.zeros((time,))
             freq = int(inp[y] * 30 + 10)
@@ -77,23 +77,22 @@ class SNN:
                     for t1 in self.sliding_window:
                         if 0 <= t + t1 < 100 and t1 != 0:
                             if train[i][t + t1] == 1:
-                                # print('weight change by' + str(update_weights(weights[0][i], t1))+ 'for neuron '+str(i))
                                 self.weights[0][i] = self.update_weights(self.weights[0][i], t1)
 
     def execute(self):
         op_neuron = LIFNeuron()
-
-        for k in range(10):
+        n_iterations = 10
+        for k in range(n_iterations):
             print('Iteration ', k)
             print('weights', self.weights)
-            for i in range(4):
+            for i in range(len(self.inp)):
                 train = np.array(self.rate_encoding(self.inp[i]))
                 op_neuron.reset()
                 self.lif(train, i, op_neuron)
 
         print('Final weights', self.weights)
 
-        for i in range(4):
+        for i in range(len(self.inp)):
             total_time = np.arange(0, len(self.potential_list[i]), 1)
             pth = []
             for j in range(len(total_time)):
