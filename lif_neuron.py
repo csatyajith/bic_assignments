@@ -3,7 +3,7 @@ import numpy as np
 
 
 class LIFNeuron:
-    def __init__(self, resting_v=-65, threshold_v=30, membrane_resistance=1, membrane_capacitance=100,
+    def __init__(self, resting_v=0, threshold_v=10, membrane_resistance=1, membrane_capacitance=10,
                  v_spike=100):
         """
         Initializes an LIF Neuron with the parameters given.

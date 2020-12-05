@@ -12,7 +12,7 @@ class SNN:
 
         self.inp = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
         self.weights = np.zeros((1, 2))
-        self.time = np.arange(0, 1000, 1)
+        self.time = np.arange(0, 100, 1)
         self.potential_list = []
         for _ in range(4):
             self.potential_list.append([])
@@ -49,18 +49,18 @@ class SNN:
 
     @staticmethod
     def rate_encoding(inp, time=1000):
-        rate_encoded_input = []  # Spike train
-        for y in range(len(inp)):
+        spike_train = []
+        for y in range(2):
             temp = np.zeros((time,))
-            freq = int(inp[y] * 30 + 10)
-            spike_gap = math.ceil(1000 / freq)
+            freq = (inp[y] * 30 + 10)
+            freq = math.ceil(600 / freq)
             i = 0
-            while i < 100:
+            while i < time:
                 temp[i] = 1
-                i = i + spike_gap
-            rate_encoded_input.append(temp)
+                i = i + freq
+            spike_train.append(temp)
 
-        return rate_encoded_input
+        return spike_train
 
     def lif(self, train, n, op_neuron):
         for t in self.time:
@@ -86,33 +86,33 @@ class SNN:
             print('Iteration ', k)
             print('weights', self.weights)
             for i in range(len(self.inp)):
-                train = np.array(self.rate_encoding(self.inp[i]))
+                train = np.array(self.rate_encoding(self.inp[i], 100))
                 op_neuron.reset()
                 self.lif(train, i, op_neuron)
 
         print('Final weights', self.weights)
 
-        for i in range(len(self.inp)):
-            total_time = np.arange(0, len(self.potential_list[i]), 1)
-            pth = []
-            for j in range(len(total_time)):
-                pth.append(op_neuron.threshold_v)
-            # plotting
-            axes1 = plt.gca()
-            plt.plot(total_time, pth, 'r')
-            plt.plot(total_time, self.potential_list[i])
-            plt.show()
-
-        color_codes = np.array([[0, 0, 0],
-                                [1, 0, 0],
-                                [0, 1, 0],
-                                [0, 0, 1]])
-
-        plt.eventplot(self.potential_list, color=color_codes)
-        plt.title('Spike raster plot')
-        plt.xlabel('Spike')
-        plt.ylabel('Neuron')
-        plt.show()
+        # for i in range(len(self.inp)):
+        #     total_time = np.arange(0, len(self.potential_list[i]), 1)
+        #     pth = []
+        #     for j in range(len(total_time)):
+        #         pth.append(op_neuron.threshold_v)
+        #     # plotting
+        #     axes1 = plt.gca()
+        #     plt.plot(total_time, pth, 'r')
+        #     plt.plot(total_time, self.potential_list[i])
+        #     plt.show()
+        #
+        # color_codes = np.array([[0, 0, 0],
+        #                         [1, 0, 0],
+        #                         [0, 1, 0],
+        #                         [0, 0, 1]])
+        #
+        # plt.eventplot(self.potential_list, color=color_codes)
+        # plt.title('Spike raster plot')
+        # plt.xlabel('Spike')
+        # plt.ylabel('Neuron')
+        # plt.show()
 
 
 if __name__ == '__main__':
