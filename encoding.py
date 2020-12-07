@@ -177,8 +177,12 @@ class SNN:
         self.outputs = [0, 1, 1, 1]
         self.execute("OR")
 
+    def execute_xor(self):
+        self.outputs = [0, 1, 1, 0]
+        self.execute("XOR")
 
 if __name__ == '__main__':
     spiking = SNN()
     spiking.execute_and()
     spiking.execute_or()
+    spiking.execute_xor()
