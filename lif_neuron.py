@@ -3,7 +3,7 @@ import numpy as np
 
 
 class LIFNeuron:
-    def __init__(self, resting_v=0, threshold_v=10, membrane_resistance=1, membrane_capacitance=10,
+    def __init__(self, resting_v=0, threshold_v=10, membrane_resistance=1, membrane_capacitance=100,
                  v_spike=100):
         """
         Initializes an LIF Neuron with the parameters given.
@@ -27,7 +27,7 @@ class LIFNeuron:
         self.t_inactive = -1
         self.membrane_potential = self.resting_v
 
-    def simulate_neuron(self, input_current, time_values, time_delta):
+    def simulate_neuron(self, input_current, time_values, time_delta, report_potentials=False):
         """
         Simulates the potential activity of a neuron.
         :param input_current: The input current to a neuron.
@@ -48,7 +48,8 @@ class LIFNeuron:
                 potentials_list.append(self.membrane_potential)
         for i, m in enumerate(potentials_list):
             if i % 100 == 0:
-                print(m)
+                if report_potentials:
+                    print(m)
         return potentials_list, spike_count
 
     @staticmethod
@@ -92,7 +93,7 @@ def q2():
 
 
 if __name__ == '__main__':
-    q1(input_current=31)
+    q1(input_current=20)
     # q1(input_current=2)
     # q1(input_current=5)
     # q2()
