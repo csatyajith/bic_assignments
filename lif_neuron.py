@@ -3,7 +3,7 @@ import numpy as np
 
 
 class LIFNeuron:
-    def __init__(self, resting_v=-65, threshold_v=30, membrane_resistance=1, membrane_capacitance=10,
+    def __init__(self, resting_v=0, threshold_v=10, membrane_resistance=1, membrane_capacitance=100,
                  v_spike=100):
         """
         Initializes an LIF Neuron with the parameters given.
@@ -20,8 +20,14 @@ class LIFNeuron:
         self.membrane_potential = resting_v
         self.v_spike = v_spike
         self.tau = self.membrane_capacitance * self.membrane_resistance
+        self.ref_period = 10
+        self.t_inactive = -1
 
-    def simulate_neuron(self, input_current, time_values, time_delta):
+    def reset(self):
+        self.t_inactive = -1
+        self.membrane_potential = self.resting_v
+
+    def simulate_neuron(self, input_current, time_values, time_delta, report_potentials=False):
         """
         Simulates the potential activity of a neuron.
         :param input_current: The input current to a neuron.
@@ -42,7 +48,8 @@ class LIFNeuron:
                 potentials_list.append(self.membrane_potential)
         for i, m in enumerate(potentials_list):
             if i % 100 == 0:
-                print(m)
+                if report_potentials:
+                    print(m)
         return potentials_list, spike_count
 
     @staticmethod
@@ -64,8 +71,8 @@ class LIFNeuron:
 
 def q1(input_current):
     input_current = input_current
-    time_delta = 0.1
-    time = 100
+    time_delta = 1
+    time = 1000
     time_values = list(np.linspace(time_delta, time, int(time / time_delta)))
     new_lif = LIFNeuron()
     potentials_list, spike_count = new_lif.simulate_neuron(input_current, time_values, time_delta)
@@ -74,8 +81,8 @@ def q1(input_current):
 
 def q2():
     input_currents = list(range(1, 200, 1))
-    time_delta = 0.1
-    time = 100
+    time_delta = 1
+    time = 1000
     time_values = list(np.linspace(time_delta, time, int(time / time_delta)))
     spike_counts = []
     for ic in input_currents:
@@ -86,7 +93,7 @@ def q2():
 
 
 if __name__ == '__main__':
-    q1(input_current=5)
-    q1(input_current=31)
-    q1(input_current=50)
-    q2()
+    q1(input_current=20)
+    # q1(input_current=2)
+    # q1(input_current=5)
+    # q2()
