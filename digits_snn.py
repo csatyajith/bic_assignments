@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
 
-from encoding import BinarySNN
+from logic_gates_snn import BinarySNN
 from lif_neuron import LIFNeuron
 
 
