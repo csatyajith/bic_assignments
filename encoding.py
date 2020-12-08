@@ -10,8 +10,9 @@ class SNN:
     def __init__(self):
 
         self.inp = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+        self.input_length = len(self.inp[0])
         self.outputs = np.array([0, 0, 0, 1])
-        self.weights = np.zeros((1, 2))
+        self.weights = np.zeros((1, self.input_length))
         self.total_time = 1000
         self.time = np.arange(0, self.total_time, 1)
         self.potential_list = []
@@ -29,7 +30,7 @@ class SNN:
 
     def weight_init(self):
         for i in range(1):
-            for j in range(2):
+            for j in range(self.input_length):
                 self.weights[i][j] = np.random.uniform(0, 1)
 
     def create_network(self, n_input_neurons, n_output_neurons):
@@ -52,7 +53,7 @@ class SNN:
 
     def rate_encoding(self, inp, time=100):
         spike_train = []
-        for y in range(2):
+        for y in range(self.input_length):
             spike_train.append(self.rate_encoding_output(inp[y], time))
 
         return spike_train
@@ -114,7 +115,7 @@ class SNN:
                 op_neuron.t_inactive = t + op_neuron.ref_period
                 print('time inactive at t =', op_neuron.t_inactive, t)
                 op_neuron.membrane_potential = op_neuron.resting_v
-                for i in range(2):
+                for i in range(self.input_length):
                     for t1 in self.sliding_window:
                         if 0 <= t + t1 < self.total_time and t1 != 0:
                             if train[i][t + t1] == 1:
@@ -178,6 +179,7 @@ class SNN:
         self.execute("OR")
 
     def execute_xor(self):
+        self.inp = self.inp = np.array([[0, 0, 1], [0, 1, 1], [1, 0, 1], [1, 1, 1]])
         self.outputs = [0, 1, 1, 0]
         self.execute("XOR")
 
